@@ -1,0 +1,28 @@
+[package]
+name = "teddy-domain"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Core serialization and types
+serde = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Validation and security
+validator = { workspace = true }
+argon2 = { workspace = true }
+secrecy = { workspace = true }
+rand = { workspace = true }
+
+# Additional utilities for domain logic
+rust_decimal = { workspace = true }
+bigdecimal = { workspace = true }
+unicode-segmentation = { workspace = true }
+
+[dev-dependencies]
+claim = { workspace = true }

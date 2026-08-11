@@ -1,0 +1,70 @@
+[package]
+name = "teddy-web"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "teddy-backend"
+path = "src/main.rs"
+
+[dependencies]
+# Internal dependencies - following Clean Architecture
+teddy-domain = { path = "../teddy-domain" }
+teddy-services = { path = "../teddy-services" }
+teddy-infrastructure = { path = "../teddy-infrastructure" }
+
+# Async runtime
+tokio = { workspace = true }
+
+# Web framework
+actix-web = { workspace = true }
+actix-web-actors = { workspace = true }
+actix-multipart = { workspace = true }
+actix-files = { workspace = true }
+actix = { workspace = true }
+
+# Authentication
+jsonwebtoken = { workspace = true }
+argon2 = { workspace = true }
+secrecy = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Observability
+tracing = { workspace = true }
+tracing-actix-web = { workspace = true }
+
+# Utilities
+uuid = { workspace = true }
+chrono = { workspace = true }
+mime = { workspace = true }
+futures-util = { workspace = true }
+bigdecimal = { workspace = true }
+
+# WebSocket support
+tokio-tungstenite = { workspace = true }
+
+# Error handling
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+# Database
+sqlx = { workspace = true }
+
+# Additional web utilities
+reqwest = { workspace = true }
+
+# TLS/SSL support
+rustls = { workspace = true }
+rustls-pemfile = { workspace = true }
+
+[features]
+default = []
+image-processing = ["image"]
+thumbnails = ["image", "image-processing"]
+
+[dependencies.image]
+workspace = true
+optional = true
