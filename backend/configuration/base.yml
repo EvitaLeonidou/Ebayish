@@ -1,0 +1,49 @@
+application:
+  port: 6000
+  host: 0.0.0.0
+  base_url: "http://0.0.0.0:6000"
+  ssl:
+    enabled: false
+    certificate_path: "./certs/server.crt"
+    private_key_path: "./certs/server.key"
+
+uploads:
+  max_file_size: 10485760  # 10mb
+  max_files_per_item: 5
+  allowed_types: 
+    - "image/jpeg"
+    - "image/png" 
+    - "image/webp"
+  upload_dir: "./uploads"
+  temp_dir: "./uploads/temp"
+  enable_image_processing: false
+  max_image_width: 4096
+  max_image_height: 4096
+
+seeding:
+  enabled: true
+  environment_filter:
+    - "production"
+    - "docker"
+  retry_attempts: 3
+  retry_delay_seconds: 2
+  seller_username: "o paliatzis"
+  seller_email: "paliatzis@example.com"
+  seller_first_name: "Παλιάτζης"
+  seller_last_name: "Ο"
+  seller_phone: "+30 2101234567"
+  seller_location: "Manolates"
+  seller_country: "Greece"
+
+database:
+  host: "db"
+  port: 5432
+  username: "postgres"
+  password: "password"
+  database_name: "db"
+  require_ssl: false
+email_client:
+  base_url: "localhost"
+  sender_email: "sdi2100227@di.uoa.gr" 
+  authorization_token: "ecb7dcda-3968-4a0c-94a4-df4bea618f9d"
+  timeout_milliseconds: 10000

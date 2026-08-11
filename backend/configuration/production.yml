@@ -1,0 +1,20 @@
+application:
+  host: 0.0.0.0
+  base_url: "https://localhost:6000"
+  ssl:
+    enabled: true
+
+uploads:
+  upload_dir: "/app/uploads"
+  temp_dir: "/app/uploads/temp"
+  enable_image_processing: true
+  max_file_size: 20971520  # 20mb
+  max_files_per_item: 5
+  max_image_width: 2048
+  max_image_height: 2048
+
+database:
+  host: "postgres"
+  require_ssl: true
+  max_connections: 5
+  acquire_timeout: 10000
