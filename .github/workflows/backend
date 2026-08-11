@@ -1,0 +1,71 @@
+name: Backend CI 
+on:
+  push:
+    branches: [ 'master','main' ]
+  pull_request:
+    branches: [ 'master','main' ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: ebay
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install PostgreSQL client
+      run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+    - name: Install sqlx-cli
+      run: cargo install --version=0.5.7 sqlx-cli --no-default-features --features postgres
+
+    - name: Setup database
+      run: |
+        export SKIP_DOCKER=true
+        ./scripts/init_db.sh
+      env:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: ebay
+        POSTGRES_PORT: 5432
+
+    - name: Build
+      run: cargo build --verbose
+      env:
+        DATABASE_URL: postgres://postgres:password@localhost:5432/ebay
+
+    - name: Run clippy
+      run: cargo clippy -- -D warnings
+      env:
+        DATABASE_URL: postgres://postgres:password@localhost:5432/ebay
+
+    - name: Run format check
+      id: format-check
+      run: cargo fmt --check --verbose
+      continue-on-error: true
+
+    - name: Test
+      run:  cargo test --verbose -- --test-threads=8
+      env:
+        DATABASE_URL: postgres://postgres:password@localhost:5432/ebay
