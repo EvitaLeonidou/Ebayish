@@ -1,0 +1,66 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: ['master', 'main']
+  pull_request:
+    branches: ['master', 'main']
+
+jobs:
+  lint-format-build:
+    runs-on: ubuntu-latest
+    permissions:
+      # This permission is required to push to the repository
+      contents: write
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Correctly check out the head of the PR for pull_request events,
+          # or the current branch for push events.
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './frontend/package-lock.json'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Check formatting
+        id: format-check
+        run: npm run format:check
+        continue-on-error: true
+
+      - name: Auto-format code if check fails
+        if: steps.format-check.outcome == 'failure'
+        run: npm run format
+
+      - name: Commit and push formatting changes
+        if: steps.format-check.outcome == 'failure'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add frontend/
+          # Only commit and push if there are actual changes
+          if ! git diff --cached --quiet; then
+            git commit -m "style: auto-format code with Prettier"
+            # Get the branch name to push to
+            BRANCH_NAME=${{ github.head_ref || github.ref_name }}
+            git push origin "$BRANCH_NAME"
+          else
+            echo "No formatting changes to commit."
+          fi
+        # Important: Run git commands from the root directory
+        working-directory: .
+
+      - name: Build project
+        run: npm run build
