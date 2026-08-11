@@ -1,0 +1,31 @@
+[package]
+name = "teddy-services"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Internal dependencies
+teddy-domain = { path = "../teddy-domain" }
+teddy-infrastructure = { path = "../teddy-infrastructure" }
+
+# Async runtime
+tokio = { workspace = true }
+
+# Database
+sqlx = { workspace = true }
+
+# Error handling
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Observability
+tracing = { workspace = true }
+
+# Additional utilities
+uuid = { workspace = true }
+chrono = { workspace = true }
+bigdecimal = { workspace = true }
