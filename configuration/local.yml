@@ -1,0 +1,17 @@
+application:
+  host: 127.0.0.1
+  base_url: "http://127.0.0.1:6000"
+  ssl:
+    enabled: true
+
+uploads:
+  upload_dir: "./uploads"
+  temp_dir: "./uploads/temp"
+  enable_image_processing: false
+  # Keep development-friendly limits
+  max_file_size: 10485760  # 10MB
+  max_files_per_item: 5
+
+database:
+  host: "localhost"
+  require_ssl: false
